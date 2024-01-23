@@ -6,8 +6,8 @@ namespace PR1
     public class Program
     {
         public static void Main()
-        {  
-             /* Constants de missatges */
+        {           
+            /* Constants de missatges */
             const string Msg_Welcome = " _   _                _   _   _ _____  ___  ___                _              _   _  _____ \r\n| | | |              (_) | | | /  ___| |  \\/  |               | |            | | | |/ __  \\\r\n| |_| | ___ _ __ ___  _  | | | \\ `--.  | .  . | ___  _ __  ___| |_ _ __ ___  | | | |`' / /'\r\n|  _  |/ _ \\ '__/ _ \\| | | | | |`--. \\ | |\\/| |/ _ \\| '_ \\/ __| __| '__/ _ \\ | | | |  / /  \r\n| | | |  __/ | | (_) | | \\ \\_/ /\\__/ / | |  | | (_) | | | \\__ \\ |_| | |  __/ \\ \\_/ /./ /___\r\n\\_| |_/\\___|_|  \\___/|_|  \\___/\\____/  \\_|  |_/\\___/|_| |_|___/\\__|_|  \\___|  \\___(_)_____/\r\n                                                                                           \r\n                                                                                           ";
             const string Msg_Start = "\"1. Iniciar una nova batalla\"\r\n\"0. Sortir\"\r\n";
             const string Msg_Difficult = "Selecciona una dificultat\r\n\"1. Fàcil\"\r\n\"2. Difícil\"\r\n\"3. Personalitzat\"\r\n\"4. Random\"\r\n";
@@ -492,6 +492,68 @@ namespace PR1
                                     }
                                     break;
                             }
+
+                            string[] names = Name_List.Split(',');
+
+                            Archer_Name = names[0];
+                            Warrior_Name = names[1];
+                            Mage_Name = names[2];
+                            Druid_Name = names[3];
+
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine(Msg_Start_Battle);
+
+                            /*Comprobació de guanyador*/
+                            if (Batalla.BatallaStart(Archer_Name, Warrior_Name, Mage_Name, Druid_Name, Archer_Health, Archer_Defense, Archer_Attack, Warrior_Health, Warrior_Defense, Warrior_Attack, Mage_Health, Mage_Defense, Mage_Attack, Druid_Health, Druid_Defense, Druid_Attack, Monster_Health, Monster_Defense, Monster_Attack))
+                            {
+                                Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine(Msg_Win);
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine(Msg_Lose);
+                            }
+                        }
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(Msg_Continue);
+                        Console.ReadKey();
+                        Console.Clear();
+
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+
+                        trys = 2;
+
+                        Console.WriteLine(Msg_Start);
+
+                        option = Convert.ToChar(Console.ReadLine());
+                        
+                        break;
+                    case '0':
+
+                        /* Sortir del joc */
+                        gamerStarted = false;
+
+                        Console.WriteLine(Msg_Final);
+
+                        break;
+                    default:
+
+                        /* Opció incorrecta */
+                        Console.WriteLine(Msg_Option_Wrong);
+                        option = Convert.ToChar(Console.ReadLine());
+                        trys--;
+                        if (trys <= Zero)
+                        {
+                            gamerStarted = false;
+                            Console.WriteLine(Msg_Trys_Out);
+                        }
+                        break;
+                }
+            }
         }
     }
 }
