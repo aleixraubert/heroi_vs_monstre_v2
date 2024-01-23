@@ -472,6 +472,28 @@
                 }
             }
         }
-         
 
+        /* Funcio que ordena un array de forma descendent */
+        public static int[] Sort_Desc(int[] array_h)
+        {
+            int temp;
+
+            for (int i = 0; i < array_h.Length; i++)
+            {
+                for (int j = 0; j < (array_h.Length - 1); j++)
+                {
+                    if (array_h[j] < array_h[j + 1])
+                    {
+                        temp = array_h[j + 1];
+
+                        array_h [j + 1] = array_h[j];
+
+                        array_h[j] = temp;
+                    }
+                }
+            }
+
+            return array_h;
+        }
+    }
 }
