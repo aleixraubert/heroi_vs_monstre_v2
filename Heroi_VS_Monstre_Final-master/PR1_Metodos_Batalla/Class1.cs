@@ -282,38 +282,6 @@
             return order;
         }
         
-         /* Funcio que fa un torn del monstre */
-        public static void Monster_Turn(ref int Monster_Attack, ref int Archer_Health, ref int Warrior_Health, ref int Mage_Health, ref int Druid_Health, ref int Archer_Defense,
-            ref int Warrior_Defense, ref int Mage_Defense, ref int Druid_Defense, ref bool Archer_Defensed, ref bool Warrior_Defensed, ref bool Mage_Defensed, ref bool Druid_Defensed)
-        {
-            Console.WriteLine(Msg_Turn_Monster, Monster_Attack);
-
-            /* Atac del monstre */
-            Archer_Health -= Monster_Attack - (Monster_Attack * Archer_Defense / 100);
-            Warrior_Health -= Monster_Attack - (Monster_Attack * Warrior_Defense / 100);
-            Mage_Health -= Monster_Attack - (Monster_Attack * Mage_Defense / 100);
-            Druid_Health -= Monster_Attack - (Monster_Attack * Druid_Defense / 100);
-
-            if (Archer_Defensed)
-            {
-                Archer_Defense /= 2;
-                Archer_Defensed = false;
-            }
-            if (Warrior_Defensed)
-            {
-                Warrior_Defense /= 2;
-                Warrior_Defensed = false;
-            }
-            if (Mage_Defensed)
-            {
-                Mage_Defense /= 2;
-                Mage_Defensed = false;
-            }
-            if (Druid_Defensed)
-            {
-                Druid_Defense /= 2;
-                Druid_Defensed = false;
-            }
-        }
+         
 
 }
