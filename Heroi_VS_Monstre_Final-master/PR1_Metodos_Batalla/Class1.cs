@@ -281,7 +281,197 @@
 
             return order;
         }
-        
+
+        /* Funcio que fa un atac */
+        public static void Attack(string Name, ref int H_Attack, ref int H_Defense, ref int M_Health, ref int M_Defense, ref bool H_Defensed, ref int Cooldown, ref bool Hability, string Hability_Name)
+        {
+            Console.WriteLine(Msg_Turn, Name, Hability_Name);
+
+            int option = Convert.ToInt32(Console.ReadLine());
+
+            int trys = 2;
+
+            while (IsNotLimits(option, 1, 3) && trys > 0)
+            {
+                Console.WriteLine("Opcio incorrecta, torna a provar.");
+                option = Convert.ToInt32(Console.ReadLine());
+                trys--;
+            }
+
+            if (trys == 0)
+            {
+                Console.WriteLine(Msg_Skipturn);
+                return;
+            }
+
+            /* Switch per decidir si atacar o defendres */
+            switch (option)
+            {
+                case 1:
+                    /* Atacar */
+                    /* Random per decidir si l'atac falla */
+                    Random random = new Random();
+                    int aux = random.Next(1, 101);
+                    if(aux < 5)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Has fallat l'atac.");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        return;
+                    }
+
+                    /* Random per decidir si l'atac es crític */
+                    aux = random.Next(1, 101);
+                    if(aux < 10)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Has fet un atac crític.");
+                        H_Attack *= 2;
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                        Console.WriteLine(Msg_Attack, Name, Monster, H_Attack);
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        M_Health -= H_Attack-(H_Attack*M_Defense/100);
+                        H_Attack /= 2;
+                        return;
+                    }
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine(Msg_Attack, Name, Monster, H_Attack);
+                    M_Health -= H_Attack - (H_Attack * M_Defense / 100);
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    break;
+                case 2:
+                    /* Defensar */
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(Msg_Defense, Name);
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    H_Defense *= 2;
+                    H_Defensed = true;
+                    break;
+                case 3:
+                    /* Habilidad */
+                    if (Cooldown == 0)
+                    {
+                        Hability = true;
+                        Cooldown = 5;
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(Msg_Used_hability, Name);
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(Msg_Cooldown, Cooldown);
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return;
+        }
+
+        /* Funcio que fa un torn del monstre */
+        public static void Monster_Turn(ref int Monster_Attack, ref int Archer_Health, ref int Warrior_Health, ref int Mage_Health, ref int Druid_Health, ref int Archer_Defense,
+            ref int Warrior_Defense, ref int Mage_Defense, ref int Druid_Defense, ref bool Archer_Defensed, ref bool Warrior_Defensed, ref bool Mage_Defensed, ref bool Druid_Defensed)
+        {
+            Console.WriteLine(Msg_Turn_Monster, Monster_Attack);
+
+            /* Atac del monstre */
+            Archer_Health -= Monster_Attack - (Monster_Attack * Archer_Defense / 100);
+            Warrior_Health -= Monster_Attack - (Monster_Attack * Warrior_Defense / 100);
+            Mage_Health -= Monster_Attack - (Monster_Attack * Mage_Defense / 100);
+            Druid_Health -= Monster_Attack - (Monster_Attack * Druid_Defense / 100);
+
+            if (Archer_Defensed)
+            {
+                Archer_Defense /= 2;
+                Archer_Defensed = false;
+            }
+            if (Warrior_Defensed)
+            {
+                Warrior_Defense /= 2;
+                Warrior_Defensed = false;
+            }
+            if (Mage_Defensed)
+            {
+                Mage_Defense /= 2;
+                Mage_Defensed = false;
+            }
+            if (Druid_Defensed)
+            {
+                Druid_Defense /= 2;
+                Druid_Defensed = false;
+            }
+        }
+
+        /* Funcio que mostra la vida dels herois */
+        public static void Display_Health(int Archer_Health, int Warrior_Health, int Mage_Health, int Druid_Health, int Monster_Health, string Archer_Name, string Warrior_Name, string Mage_Name, string Druid_Name)
+        {
+            int[] healths = new int[4];
+
+            healths[0] = Archer_Health;
+            healths[1] = Warrior_Health;
+            healths[2] = Mage_Health;
+            healths[3] = Druid_Health;
+
+            int[]healths_sort = Sort_Desc(healths);
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (healths[i] == Archer_Health)
+                {
+                    if (Archer_Health > 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(Msg_Health, Archer_Name, Archer_Health);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(Msg_No_Health, Archer_Name);
+                    }
+                }
+                else if (healths[i] == Warrior_Health)
+                {
+                    if (Warrior_Health > 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(Msg_Health, Warrior_Name, Warrior_Health);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(Msg_No_Health, Warrior_Name);
+                    }
+                }
+                else if (healths[i] == Mage_Health)
+                {
+                    if (Mage_Health > 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(Msg_Health, Mage_Name, Mage_Health);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(Msg_No_Health, Mage_Name);
+                    }
+                }
+                else if (healths[i] == Druid_Health)
+                {
+                    if (Druid_Health > 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(Msg_Health, Druid_Name, Druid_Health);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(Msg_No_Health, Druid_Name);
+                    }
+                }
+            }
+        }
          
 
 }
